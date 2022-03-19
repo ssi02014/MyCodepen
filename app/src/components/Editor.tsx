@@ -15,6 +15,7 @@ interface Props {
 const Editor = ({ value, displayName, language, onChange }: Props) => {
   const [open, setOpend] = useState(true);
 
+  // 매개변수로 넘기는 editor, data 없으면 error 발생
   const handleChange = useCallback(
     (editor, data, value) => {
       onChange(value);
