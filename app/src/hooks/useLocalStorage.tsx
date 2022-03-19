@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 const PREFIX = "myCodepen-";
-const useLocalStorage = (key: any, initialValue: any) => {
+
+type InitialValue = string | (() => string);
+
+const useLocalStorage = (key: string, initialValue: InitialValue) => {
   const prefixedKey = PREFIX + key;
   const [value, setValue] = useState(() => {
     const jsonValue = localStorage.getItem(prefixedKey);
