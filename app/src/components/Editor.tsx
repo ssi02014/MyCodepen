@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/mode/xml/xml";
@@ -13,17 +13,23 @@ interface Props {
   onChange: React.Dispatch<React.SetStateAction<string>>;
 }
 const Editor = ({ value, displayName, language, onChange }: Props) => {
+  const [open, setOpend] = useState(true);
+
   const handleChange = useCallback(
     (editor, data, value) => {
       onChange(value);
     },
     [onChange]
   );
+
+  const handleToggleEditor = useCallback(() => {
+    setOpend((prev) => !prev);
+  }, []);
   return (
-    <div className="editor-container">
+    <div className={`editor-container ${open ? "" : "collapsed"}`}>
       <div className="editor-title">
         {displayName}
-        <button>O/C</button>
+        <button onClick={handleToggleEditor}>O/C</button>
       </div>
       <ControlledEditor
         onBeforeChange={handleChange}

@@ -1,15 +1,33 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Editor from "./components/Editor";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 function App() {
-  const [html, setHtml] = useState("");
-  const [css, setCss] = useState("");
-  const [js, setJs] = useState("");
+  const [html, setHtml] = useLocalStorage("html", "");
+  const [css, setCss] = useLocalStorage("css", "");
+  const [js, setJs] = useLocalStorage("js", "");
+  const [srcDoc, setSrcDoc] = useState("");
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setSrcDoc(`
+        <html>
+          <head>
+            <style>${css}</style>
+          </head>
+          <body>${html}</body>
+          <script>${js}</script>
+        </html>
+      `);
+    }, 250);
+
+    return () => clearTimeout(timeout);
+  }, [html, css, js]);
+
   return (
     <>
-      <div className="pane top-pane">
+      <div className="top-pane pane">
         <Editor
           language="xml"
           displayName="HTML"
@@ -31,6 +49,7 @@ function App() {
       </div>
       <div className="pane">
         <iframe
+          srcDoc={srcDoc}
           title="output"
           sandbox="allow-scripts"
           frameBorder="0"
